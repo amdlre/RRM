@@ -5,7 +5,20 @@
 
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { Shield, Twitter, Linkedin, Globe } from 'lucide-react';
+import { Shield, Linkedin, Globe } from 'lucide-react';
+import { SITE } from '../config/site';
+
+const XIcon: React.FC<{ size?: number }> = ({ size = 18 }) => (
+  <svg
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    fill="currentColor"
+    aria-hidden="true"
+  >
+    <path d="M18.244 2H21.5l-7.5 8.57L22.75 22h-6.844l-5.36-7.005L4.4 22H1.142l8.02-9.166L1.25 2h7.013l4.84 6.39L18.244 2Zm-2.4 18h1.892L7.234 4H5.207l10.637 16Z" />
+  </svg>
+);
 
 export const Footer: React.FC = () => {
   return (
@@ -17,13 +30,13 @@ export const Footer: React.FC = () => {
           <div className="lg:col-span-4">
             <Link to="/" className="flex items-center gap-3 mb-8 group cursor-pointer">
               <img
-                src="https://i.ibb.co/hRW4J0BP/K-1.png"
-                alt="إدارة المخاطر"
+                src={SITE.logoUrl}
+                alt={SITE.brandName}
                 className="h-14 w-auto brightness-0 invert transition-transform group-hover:scale-105"
                 referrerPolicy="no-referrer"
               />
               <span className="text-xl font-bold leading-none text-white">
-                إدارة المخاطر الإيجارية
+                {SITE.brandName}
               </span>
             </Link>
             <p className="text-white/50 max-w-sm leading-relaxed text-lg mb-10">
@@ -44,11 +57,23 @@ export const Footer: React.FC = () => {
               </div>
             </div>
             <div className="flex gap-4">
-              {[Twitter, Linkedin].map((Icon, i) => (
-                <a key={i} href="#" className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center hover:bg-brand-secondary hover:text-brand-primary transition-all">
-                  <Icon size={18} />
-                </a>
-              ))}
+              {[
+                { Icon: XIcon, href: SITE.social.twitter, label: 'X' },
+                { Icon: Linkedin, href: SITE.social.linkedin, label: 'LinkedIn' },
+              ]
+                .filter((s) => Boolean(s.href))
+                .map(({ Icon, href, label }) => (
+                  <a
+                    key={label}
+                    href={href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    aria-label={label}
+                    className="w-10 h-10 rounded-xl bg-white/5 flex items-center justify-center hover:bg-brand-secondary hover:text-brand-primary transition-all"
+                  >
+                    <Icon size={18} />
+                  </a>
+                ))}
             </div>
           </div>
 
@@ -87,7 +112,7 @@ export const Footer: React.FC = () => {
           <div className="flex flex-col lg:flex-row justify-between items-center gap-8">
             {/* Copyright & Legal Links */}
             <div className="flex flex-col md:flex-row items-center gap-6 text-sm text-white/40">
-              <p>جميع الحقوق محفوظة © {new Date().getFullYear()} لمنظومة إدارة المخاطر العقارية.</p>
+              <p>جميع الحقوق محفوظة © {new Date().getFullYear()} {SITE.brandName}.</p>
               <div className="flex gap-6">
                 <Link to="/privacy" className="hover:text-brand-secondary transition-colors">سياسة الخصوصية</Link>
                 <Link to="/terms" className="hover:text-brand-secondary transition-colors">الشروط والأحكام</Link>

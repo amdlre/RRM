@@ -8,12 +8,14 @@ import { motion, AnimatePresence } from 'motion/react';
 import { Link } from 'react-router-dom';
 import { CheckCircle2, Send, Phone, Mail, MapPin } from 'lucide-react';
 import { SERVICE_OPTIONS } from '../constants';
+import { SITE } from '../config/site';
 
 interface ContactFormProps {
   formRef: React.RefObject<HTMLDivElement | null>;
   selectedPackage: string;
   setSelectedPackage: (pkg: string) => void;
   formSubmitted: boolean;
+  submitting?: boolean;
   handleSubmit: (e: React.FormEvent) => void;
 }
 
@@ -22,6 +24,7 @@ export const ContactForm: React.FC<ContactFormProps> = ({
   selectedPackage,
   setSelectedPackage,
   formSubmitted,
+  submitting,
   handleSubmit
 }) => {
   return (
@@ -35,24 +38,39 @@ export const ContactForm: React.FC<ContactFormProps> = ({
           </p>
 
           <div className="space-y-8">
-            <div className="flex items-center gap-6 group">
-              <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-brand-secondary border border-line group-hover:bg-brand-secondary group-hover:text-white transition-all">
-                <Mail size={20} />
+            {SITE.contact.email && (
+              <a href={`mailto:${SITE.contact.email}`} className="flex items-center gap-6 group">
+                <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-brand-secondary border border-line group-hover:bg-brand-secondary group-hover:text-white transition-all">
+                  <Mail size={20} />
+                </div>
+                <div>
+                  <span className="text-xs text-ink-muted block uppercase tracking-normal font-bold mb-1">البريد الإلكتروني</span>
+                  <span className="text-lg font-bold text-brand-primary" dir="ltr">{SITE.contact.email}</span>
+                </div>
+              </a>
+            )}
+            {SITE.contact.phone && (
+              <a href={`tel:${SITE.contact.phone.replace(/\s+/g, '')}`} className="flex items-center gap-6 group">
+                <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-brand-secondary border border-line group-hover:bg-brand-secondary group-hover:text-white transition-all">
+                  <Phone size={20} />
+                </div>
+                <div>
+                  <span className="text-xs text-ink-muted block uppercase tracking-normal font-bold mb-1">رقم الجوال</span>
+                  <span className="text-lg font-bold text-brand-primary" dir="ltr">{SITE.contact.phone}</span>
+                </div>
+              </a>
+            )}
+            {SITE.contact.address && (
+              <div className="flex items-center gap-6 group">
+                <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-brand-secondary border border-line group-hover:bg-brand-secondary group-hover:text-white transition-all">
+                  <MapPin size={20} />
+                </div>
+                <div>
+                  <span className="text-xs text-ink-muted block uppercase tracking-normal font-bold mb-1">المقر الرئيسي</span>
+                  <span className="text-lg font-bold text-brand-primary">{SITE.contact.address}</span>
+                </div>
               </div>
-              <div>
-                <span className="text-xs text-ink-muted block uppercase tracking-normal font-bold mb-1">البريد الإلكتروني</span>
-                <span className="text-lg font-bold text-brand-primary">info@risk.rentals</span>
-              </div>
-            </div>
-            <div className="flex items-center gap-6 group">
-              <div className="w-12 h-12 bg-white rounded-2xl flex items-center justify-center text-brand-secondary border border-line group-hover:bg-brand-secondary group-hover:text-white transition-all">
-                <MapPin size={20} />
-              </div>
-              <div>
-                <span className="text-xs text-ink-muted block uppercase tracking-normal font-bold mb-1">المقر الرئيسي</span>
-                <span className="text-lg font-bold text-brand-primary">الرياض، المملكة العربية السعودية</span>
-              </div>
-            </div>
+            )}
           </div>
         </div>
 
@@ -122,8 +140,8 @@ export const ContactForm: React.FC<ContactFormProps> = ({
                     <textarea required name="message" rows={4} placeholder="يرجى كتابة تفاصيل مختصرة عن عدد الوحدات أو المشكلة التي تواجهها..." className="w-full bg-bg-subtle mt-3 border border-line rounded-2xl p-4 focus:border-brand-secondary focus:ring-4 focus:ring-brand-secondary/5 outline-none transition-all font-medium resize-none" />
                   </div>
 
-                  <button type="submit" className="btn-primary w-full py-5 text-xl group">
-                    <span>إرسال الطلب الآن</span>
+                  <button type="submit" disabled={submitting} className="btn-primary w-full py-5 text-xl group disabled:opacity-60 disabled:cursor-not-allowed">
+                    <span>{submitting ? 'جاري الإرسال...' : 'إرسال الطلب الآن'}</span>
                     <Send className="w-5 h-5 group-hover:translate-x-[-4px] transition-transform" />
                   </button>
 

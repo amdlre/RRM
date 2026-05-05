@@ -20,7 +20,7 @@ import { useContactForm } from './hooks/useContactForm';
 
 export default function App() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
-  const { selectedPackage, setSelectedPackage, formSubmitted, formRef, handleSubmit } = useContactForm();
+  const { selectedPackage, setSelectedPackage, formSubmitted, submitting, formRef, handleSubmit } = useContactForm();
 
   const scrollToForm = (pkg?: string) => {
     if (pkg) setSelectedPackage(pkg);
@@ -39,10 +39,11 @@ export default function App() {
 
         <Routes>
           <Route path="/" element={
-            <Home 
+            <Home
               selectedPackage={selectedPackage}
               setSelectedPackage={setSelectedPackage}
               formSubmitted={formSubmitted}
+              submitting={submitting}
               handleSubmit={handleSubmit}
               formRef={formRef}
               scrollToForm={scrollToForm}

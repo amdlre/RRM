@@ -8,40 +8,41 @@ import { motion } from 'motion/react';
 import { Phone, Mail, MapPin, Clock, MessageSquare } from 'lucide-react';
 import { ContactForm } from '../components/ContactForm';
 import { useContactForm } from '../hooks/useContactForm';
+import { SITE } from '../config/site';
 
 export const Contact: React.FC = () => {
-  const { selectedPackage, setSelectedPackage, formSubmitted, formRef, handleSubmit } = useContactForm();
+  const { selectedPackage, setSelectedPackage, formSubmitted, submitting, formRef, handleSubmit } = useContactForm();
 
   useEffect(() => {
     window.scrollTo(0, 0);
   }, []);
 
   const contactInfo = [
-    {
+    SITE.contact.phone && {
       icon: <Phone size={24} />,
       title: 'اتصل بنا',
-      details: '9200 XXXXX',
-      sub: 'متاح من 9 ص حتى 6 م'
+      details: SITE.contact.phone,
+      sub: SITE.contact.phoneAvailability
     },
-    {
+    SITE.contact.email && {
       icon: <Mail size={24} />,
       title: 'البريد الإلكتروني',
-      details: 'info@risk.rentals',
+      details: SITE.contact.email,
       sub: 'نرد خلال 24 ساعة'
     },
-    {
+    SITE.contact.addressDetail && {
       icon: <MapPin size={24} />,
       title: 'المقر الرئيسي',
-      details: 'الرياض، حي الملقا',
-      sub: 'طريق الملك فهد'
+      details: SITE.contact.addressDetail,
+      sub: SITE.contact.addressSub
     },
-    {
+    SITE.workingHours.days && {
       icon: <Clock size={24} />,
       title: 'ساعات العمل',
-      details: 'الأحد - الخميس',
-      sub: '9:00 ص - 6:00 م'
+      details: SITE.workingHours.days,
+      sub: SITE.workingHours.hours
     }
-  ];
+  ].filter(Boolean) as Array<{ icon: React.ReactNode; title: string; details: string; sub: string }>;
 
   return (
     <div className="min-h-screen bg-white">
@@ -88,11 +89,12 @@ export const Contact: React.FC = () => {
 
       {/* Form Section */}
       <div className="bg-bg-subtle/30">
-        <ContactForm 
+        <ContactForm
           formRef={formRef}
           selectedPackage={selectedPackage}
           setSelectedPackage={setSelectedPackage}
           formSubmitted={formSubmitted}
+          submitting={submitting}
           handleSubmit={handleSubmit}
         />
       </div>

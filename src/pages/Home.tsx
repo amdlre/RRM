@@ -18,15 +18,17 @@ interface HomeProps {
   selectedPackage: string;
   setSelectedPackage: (pkg: string) => void;
   formSubmitted: boolean;
+  submitting?: boolean;
   handleSubmit: (e: React.FormEvent) => void;
   formRef: React.RefObject<HTMLDivElement | null>;
   scrollToForm: (pkg?: string) => void;
 }
 
-export const Home: React.FC<HomeProps> = ({ 
-  selectedPackage, 
-  setSelectedPackage, 
-  formSubmitted, 
+export const Home: React.FC<HomeProps> = ({
+  selectedPackage,
+  setSelectedPackage,
+  formSubmitted,
+  submitting,
   handleSubmit,
   formRef,
   scrollToForm
@@ -56,11 +58,12 @@ export const Home: React.FC<HomeProps> = ({
         <ConsultationCTA scrollToForm={scrollToForm} />
         <Workflow />
         
-        <ContactForm 
+        <ContactForm
           formRef={formRef}
           selectedPackage={selectedPackage}
           setSelectedPackage={setSelectedPackage}
           formSubmitted={formSubmitted}
+          submitting={submitting}
           handleSubmit={handleSubmit}
         />
       </div>

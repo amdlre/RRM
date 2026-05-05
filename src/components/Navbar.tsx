@@ -8,6 +8,7 @@ import { motion, AnimatePresence } from 'motion/react';
 import { Menu, X, Shield } from 'lucide-react';
 import { Link, useLocation, useNavigate } from 'react-router-dom';
 import { NAV_LINKS } from '../constants';
+import { SITE } from '../config/site';
 
 interface NavbarProps {
   isMenuOpen: boolean;
@@ -50,14 +51,14 @@ export const Navbar: React.FC<NavbarProps> = ({ isMenuOpen, setIsMenuOpen, scrol
       >
         <div className="max-w-7xl mx-auto px-6 md:px-12 flex items-center justify-between">
           <Link to="/" className="flex items-center gap-3 group cursor-pointer">
-            <img 
-              src="https://i.ibb.co/hRW4J0BP/K-1.png" 
-              alt="إدارة المخاطر" 
+            <img
+              src={SITE.logoUrl}
+              alt={SITE.brandName}
               className="h-12 w-auto transition-transform group-hover:scale-105"
               referrerPolicy="no-referrer"
             />
             <span className={`text-lg font-bold tracking-tight leading-none hidden sm:block ${isDarkPage ? 'text-white' : 'text-brand-primary'}`}>
-              إدارة المخاطر الإيجارية
+              {SITE.brandName}
             </span>
           </Link>
 
@@ -106,13 +107,13 @@ export const Navbar: React.FC<NavbarProps> = ({ isMenuOpen, setIsMenuOpen, scrol
           >
             <div className="flex justify-between items-center mb-12">
               <Link to="/" onClick={() => setIsMenuOpen(false)} className="flex items-center gap-3">
-                <img 
-                  src="https://i.ibb.co/hRW4J0BP/K-1.png" 
-                  alt="إدارة المخاطر" 
+                <img
+                  src={SITE.logoUrl}
+                  alt={SITE.brandName}
                   className="h-10 w-auto"
                   referrerPolicy="no-referrer"
                 />
-                <span className="font-bold text-brand-primary">إدارة المخاطر الإيجارية</span>
+                <span className="font-bold text-brand-primary">{SITE.brandName}</span>
               </Link>
               <button className="p-2 text-brand-primary" onClick={() => setIsMenuOpen(false)}>
                 <X size={24} />

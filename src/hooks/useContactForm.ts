@@ -3,35 +3,34 @@
  * SPDX-License-Identifier: Apache-2.0
  */
 
-import { useState, useRef } from 'react';
-
-const FORMSPREE_URL = 'https://formspree.io/f/xvzwwppb';
+import { useEffect, useRef, useState } from 'react';
+import { useForm } from '@formspree/react';
+import { SITE } from '../config/site';
 
 export function useContactForm() {
   const [selectedPackage, setSelectedPackage] = useState('');
-  const [formSubmitted, setFormSubmitted] = useState(false);
   const formRef = useRef<HTMLDivElement>(null);
+  const [state, submitToFormspree] = useForm(SITE.formspreeId);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     const form = e.target as HTMLFormElement;
     const formData = new FormData(form);
-
-    try {
-      const res = await fetch(FORMSPREE_URL, {
-        method: 'POST',
-        body: formData,
-        headers: { Accept: 'application/json' },
-      });
-      if (res.ok) {
-        setFormSubmitted(true);
-        form.reset();
-        setSelectedPackage('');
-      }
-    } catch {
-      // silent fail
-    }
+    await submitToFormspree(formData);
   };
 
-  return { selectedPackage, setSelectedPackage, formSubmitted, formRef, handleSubmit };
+  useEffect(() => {
+    if (state.succeeded) {
+      setSelectedPackage('');
+    }
+  }, [state.succeeded]);
+
+  return {
+    selectedPackage,
+    setSelectedPackage,
+    formSubmitted: state.succeeded,
+    submitting: state.submitting,
+    formRef,
+    handleSubmit,
+  };
 }
